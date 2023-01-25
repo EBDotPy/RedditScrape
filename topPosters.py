@@ -51,8 +51,6 @@ for poster, count in top_posters.most_common(10):
     print(poster)
 
 
-# I want to start from here:
-
 # Use the subreddit or user option. Which lead to sub options. Use click.
 # Time is hour, week, month, year, all time
 
