@@ -21,7 +21,7 @@ async def top_posts(ctx):
     for post in posts:
         if post.link_flair_text == "Workflow Included" and post.created_utc > (now - datetime.timedelta(days=1)).timestamp():
             output += str(count) + ": " + post.title + "\n"
-            output += "https://www.reddit.com/" + post.permalink + "\n"
+            output += "https://www.reddit.com" + post.permalink + "\n"
             count += 1
             if count > 5:
                 break
