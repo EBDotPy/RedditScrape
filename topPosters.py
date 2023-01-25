@@ -1,4 +1,4 @@
-#simple script to get top 10 posters by subreddit/time
+#simple script to get top X posters by subreddit/time
 
 import praw
 from collections import Counter
