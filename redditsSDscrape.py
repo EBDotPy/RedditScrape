@@ -11,25 +11,21 @@ from cred import client_id, client_secret, username, password, user_agent, token
 
 bot = commands.Bot(command_prefix='!')
 
+def get_top_posts(subreddit, limit=1000):
+    reddit = praw.Reddit(client_id=client_id, client_secret=client_secret,
+                         username=username, password=password, user_agent=user_agent)
+    now = datetime.datetime.now()
+    return [post for post in reddit.subreddit(subreddit).new(limit=limit) if post.link_flair_text == "Workflow Included" and post.created_utc > (now - datetime.timedelta(days=1)).timestamp()]
+
 @bot.command()
 async def top_posts(ctx):
     try:
-        reddit = praw.Reddit(client_id=client_id, client_secret=client_secret,
-                             username=username, password=password, user_agent=user_agent)
-        posts = reddit.subreddit('StableDiffusion').new(limit=1000)
-        now = datetime.datetime.now()
-        count = 1
-        output = ""
-        for post in posts:
-            if post.link_flair_text == "Workflow Included" and post.created_utc > (now - datetime.timedelta(days=1)).timestamp():
-                output += str(count) + ": " + post.title + "\n"
-                output += post.url + "\n"
-                count += 1
-                if count > 5:
-                    break
+        posts = get_top_posts('StableDiffusion')[:5]
+        output = '\n'.join([f'{i + 1}: {post.title}\n{post.url}' for i, post in enumerate(posts)])
         await ctx.send(output)
     except Exception as e:
         await ctx.send("An error occured. Please make sure that the subreddit exist or try again later.")
+
 
 def job():
     bot.loop.create_task(bot.get_command('top_posts').callback(None, None))
