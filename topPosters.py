@@ -30,12 +30,9 @@ time_periods = {
     "hour": subreddit.new(limit=1000),
     "week": subreddit.top(time_filter='week', limit=1000),
     "month": subreddit.top(time_filter='month', limit=1000),
-    "year": subreddit.top(time_filter='year', limit=1000)
+    "year": subreddit.top(time_filter='year', limit=1000),
+    "alltime": subreddit.top(limit=1000)
 }
-
-# Subreddit option: top X posters in Y time, top X posts in Y time
-# User option: top X comments in Y time  + permalink, posts that contain "keyword/phrase" in comments in Y time + permalink
-# ambitious would be top X word lists in Y time.
 
 submissions = time_periods.get(time_period, "Invalid time period")
 
@@ -46,8 +43,11 @@ if submissions == "Invalid time period":
 posters = [submission.author.name for submission in submissions if submission.author is not None]
 top_posters = Counter(posters)
 
-# Print the top 10 posters
-for poster, count in top_posters.most_common(10):
+#Ask the user how many posters they want to see
+num_posters = int(input("Enter the number of top posters you want to see: "))
+
+#Print the top num_posters posters
+for poster, count in top_posters.most_common(num_posters):
     print(poster)
 
 
