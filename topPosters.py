@@ -33,6 +33,10 @@ time_periods = {
     "year": subreddit.top(time_filter='year', limit=1000)
 }
 
+# Subreddit option: top X posters in Y time, top X posts in Y time
+# User option: top X comments in Y time  + permalink, posts that contain "keyword/phrase" in comments in Y time + permalink
+# ambitious would be top X word lists in Y time.
+
 submissions = time_periods.get(time_period, "Invalid time period")
 
 if submissions == "Invalid time period":
@@ -45,3 +49,14 @@ top_posters = Counter(posters)
 # Print the top 10 posters
 for poster, count in top_posters.most_common(10):
     print(poster)
+
+
+# I want to start from here:
+
+# Use the subreddit or user option. Which lead to sub options. Use click.
+# Time is hour, week, month, year, all time
+
+# Subreddit option: FIRST ask if nsfw or not, then ask for top X posters in Y time as a numbered lists of users,
+# or top X posts permalinks in Y time
+# User option: X top upvoted comments as a string + permalink in Y time, posts that contain "keyword/phrase"
+# in all comments in Y time + permalink
