@@ -27,14 +27,10 @@ def subreddit():
     subreddit_name = click.prompt("Enter the subreddit name")
     time_period = click.prompt("Enter the time period",
                                type=click.Choice(["hour", "week", "month", "year", "alltime"]))
-
     subreddit = reddit.subreddit(subreddit_name)
-
     submissions = subreddit.top(time_filter=time_period, limit=1000)
-
     posters = [submission.author.name for submission in submissions if submission.author is not None]
     top_posters = Counter(posters)
-
     # Print the top num_posters posters
     for i, (poster, count) in enumerate(top_posters.most_common(num_posters)):
         click.echo(f"{i + 1}. {poster}")
@@ -45,12 +41,14 @@ def user():
     user = reddit.redditor(username)
     time_period = click.prompt("Enter the time period",
                                type=click.Choice(["hour", "week", "month", "year", "alltime"]))
+    # Handle time
     if time_period == "alltime":
         comments = user.comments.new(limit=1000)
     else:
         comments = user.comments.top(time_filter=time_period, limit=1000)
     top_key = click.prompt("Do you want to see top posts, or search for keyphrase?",
                            type=click.Choice(["top", "key"]))
+    # Handle top comments (add posts later)
     if top_key == "top":
         top(username, time_period)
     elif top_key == "key":
@@ -77,9 +75,6 @@ def key(username, time_period):
             break
         if keyword in comment.body.lower():
             click.echo(f"{i + 1}. {comment.body} - https://www.reddit.com{comment.permalink}\n")
-
-
-
 
 if __name__ == "__main__":
     main()
