@@ -25,9 +25,8 @@ def subreddit():
     # Subreddit option
     nsfw = click.confirm("Is the subreddit NSFW?", default=False)
     subreddit_name = click.prompt("Enter the subreddit name")
-    time_period = click.prompt("Enter the time period (hour/week/month/year/alltime)",
+    time_period = click.prompt("Enter the time period",
                                type=click.Choice(["hour", "week", "month", "year", "alltime"]))
-    num_posters = click.prompt("Enter the number of top posters you want to see", type=int)
 
     subreddit = reddit.subreddit(subreddit_name)
 
@@ -44,13 +43,14 @@ def user():
     # User option
     username = click.prompt("Enter the username")
     user = reddit.redditor(username)
-    time_period = click.prompt("Enter the time period (hour/week/month/year/alltime)",
+    time_period = click.prompt("Enter the time period",
                                type=click.Choice(["hour", "week", "month", "year", "alltime"]))
     if time_period == "alltime":
         comments = user.comments.new(limit=1000)
     else:
         comments = user.comments.top(time_filter=time_period, limit=1000)
-
+    top_key = click.prompt("Do you want to see top posts, or search for keyphrase?",
+                           type=click.Choice(["top", "key"]))
     if top_key == "top":
         top(username, time_period)
     elif top_key == "key":
