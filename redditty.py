@@ -43,9 +43,13 @@ def subreddit():
 def user():
     # User option
     username = click.prompt("Enter the username")
+    user = reddit.redditor(username)
     time_period = click.prompt("Enter the time period (hour/week/month/year/alltime)",
                                type=click.Choice(["hour", "week", "month", "year", "alltime"]))
-    top_key = click.prompt("top or key?", type=click.Choice(["top", "key"]))
+    if time_period == "alltime":
+        comments = user.comments.new(limit=1000)
+    else:
+        comments = user.comments.top(time_filter=time_period, limit=1000)
 
     if top_key == "top":
         top(username, time_period)
