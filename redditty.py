@@ -26,9 +26,13 @@ def subreddit():
     nsfw = click.confirm("Is the subreddit NSFW?", default=False)
     subreddit_name = click.prompt("Enter the subreddit name")
     time_period = click.prompt("Enter the time period",
-                               type=click.Choice(["hour", "week", "month", "year", "alltime"]))
+                               type=click.Choice(["hour", "week", "month", "year", "all"]))
     subreddit = reddit.subreddit(subreddit_name)
-    submissions = subreddit.top(time_filter=time_period, limit=1000)
+    if time_period == "all":
+        submissions = subreddit.new(limit=1000)
+    else:
+        submissions = subreddit.top(time_filter=time_period, limit=1000)
+
     posters = [submission.author.name for submission in submissions if submission.author is not None]
     top_posters = Counter(posters)
     # Print the top num_posters posters
@@ -40,9 +44,10 @@ def user():
     username = click.prompt("Enter the username")
     user = reddit.redditor(username)
     time_period = click.prompt("Enter the time period",
-                               type=click.Choice(["hour", "week", "month", "year", "alltime"]))
+                               type=click.Choice(["hour", "week", "month", "year", "all"]))
     # Handle time
-    if time_period == "alltime":
+    comments = user.comments.top(time_filter=time_period, limit=1000)
+    if time_period == "all":
         comments = user.comments.new(limit=1000)
     else:
         comments = user.comments.top(time_filter=time_period, limit=1000)
