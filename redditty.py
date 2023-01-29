@@ -11,7 +11,6 @@ reddit = praw.Reddit(client_id=client_id,
                      password=password,
                      user_agent=user_agent)
 
-
 # Define the main function
 @click.command()
 @click.option("--option", type=click.Choice(["subreddit", "user"]))
