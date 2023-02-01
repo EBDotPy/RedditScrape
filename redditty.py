@@ -26,6 +26,7 @@ def subreddit():
     subreddit_name = click.prompt("Enter the subreddit name")
     time_period = click.prompt("Enter the time period",
                                type=click.Choice(["hour", "week", "month", "year", "all"]))
+    num_posters = click.prompt("Enter the number of top posters you want to display", type=int)
     subreddit = reddit.subreddit(subreddit_name)
     if time_period == "all":
         submissions = subreddit.new(limit=1000)
@@ -37,6 +38,7 @@ def subreddit():
     # Print the top num_posters posters
     for i, (poster, count) in enumerate(top_posters.most_common(num_posters)):
         click.echo(f"{i + 1}. {poster}")
+
 
 def user():
     # User option
